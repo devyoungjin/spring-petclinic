@@ -19,6 +19,8 @@
 - 프로젝트 살펴보기
   - [프로젝트 살펴보기](#explore)
 - 프로젝트 과제
+  - [과제](#quiz)
+  - [풀이](#solution)
 
 <br>
 
@@ -109,3 +111,108 @@ loggin.level.org.springframework.web=DEBUG
 마지막 출력된 문장에서는 200 OK가 출력되었는데, 리소스를 성공적으로 불러왔음을 나타내는 HTTP 상태코드인것 같다.
 
 <br>
+
+## <a name="quiz">과제</a>
+
+- Find Owner에서 LastName 대신 FirstName으로 조회하기
+- 단어가 정확히 일치하지 않아도 일부 일치해도 결과 출력하기
+- Owner 객체에 age 추가하기
+
+<br>
+
+## <a name="solution">풀이</a>
+
+### **Find Owner에서 LastName대신 FirstName으로 조회하기**
+
+![](https://lh3.googleusercontent.com/jRJd10fZSgBIyehquyjIEE9HGcGeNnJbOqCtdczJy3buXgAcSeUAY4xZ4AzO5D6f5p1ExUpieH63kuQQbwXEz9tyHUMfmEUBKoGd3OzWLk1BVwrPwV4lChxD9fHGqJTjaqhKkI3zbPee-EBJ65Zrrh9um1sQ1xVjJRf9ASXPmDXPbUnLkbqCZL7uM7nD82LnL5jNPqp-HujNSSI4R9yyvZsuOKh0UYheFj5Dbxj9PnjcPHWX2dgMpBwsE61mV1R8n-F1dpf7gfiy9B_KryFHqarHN1QaZHs6aSXjum9HEU0MefO2tNdEsAMJ76bcmDNzv7LBOwKwAQFH4M_G60Eq4--QKSYoiaXeYlIWAq4eQwlpLGL0DS5ZJ4uRmmfYTUcymyo6NoUPaRNRXxBLhvGiyo9cjLz7WHkf76mc8jM5ltHn_WBzU0odBHLktHVWthQaGg6NbSMcX5cKV9CJa7p4GSWmso4k2Xj6WX66n0vL-viC_-ZXvooUMgCOuU4NWhGUSwCAa_djIKfLM2V3cpyUboqjlOIieCXreywVmkgzrymT5F8DimyXhS3UpZ6PuLRnL_NHzE0SJUcMwmf1303bMoWsaGizq9NRm80duA8BtBapTkmOh73GAy5cpw2XclQNzIAu-dH77jXvgsxjkYBtw57E34YRJytSgYptMEuFiWLmFRghEL_xZUaGEqJ9v1t6nKLcfggka4k9ITialNWMNE8ITNRPWTkuIq1QU9I779r_N_QdU1VZebQ_=w640-h530-no)
+
+`/owners/find` 에서 조회 기준으로 Last name으로 되어있는데 이 텍스트부터 바꾸는것으로 시작한다.
+
+**findOwners.html**
+
+~~~html
+<h2>Find Owners</h2>
+
+<form th:object="${owner}" th:action="@{/owners}" method="get"
+      class="form-horizontal" id="search-owner-form">
+  <div class="form-group">
+    <div class="control-group" id="lastNameGroup">
+      <label class="col-sm-2 control-label">First name </label>
+      <div class="col-sm-10">
+        <input class="form-control" th:field="*{firstName}" size="30"
+               maxlength="80" /> 
+        <span class="help-inline">
+          <div th:if="${#fields.hasAnyErrors()}">
+            <p th:each="err : ${#fields.allErrors()}" th:text="${err}">
+              Error
+            </p>
+          </div>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Find
+        Owner</button>
+    </div>
+  </div>
+
+</form>
+~~~
+
+전체 코드를 가져오긴 했지만, `label`과 입력받은 데이터를 바인딩처리할 `input` 박스의 `th:field` 값만 바꿔주었다. 이제 입력받은 값을 lastName이 아니라 firstName으로 인식할 수 있게 되었다. 이제 이렇게 가져온 데이터를 처리할 컨트롤러를 수정할 차례이다.
+
+
+
+**OwnerController.java**
+
+~~~java
+@GetMapping("/owners")
+public String processFindForm(Owner owner, BindingResult result, Map<String, Object> model) {
+
+  // allow parameterless GET request for /owners to return all records
+  if (owner.getFirstName() == null) {
+    owner.setFirstName(""); // empty string signifies broadest possible search
+  }
+  
+  // find owners by last name
+  Collection<Owner> results = this.owners.findByFirstName(owner.getFirstName());
+  if (results.isEmpty()) {
+    // no owners found
+    result.rejectValue("firstName", "notFound", "not found");
+    return "owners/findOwners";
+  } 
+  ...
+}
+~~~
+
+OwnerController의 `processFindForm` 메서드를 보면, 입력받은 lastName이 null일 경우, LastName을 빈 값(`""`)으로 지정하도록 되어있다. 여기서 `lastName`을 모두 `firstName`으로 바꿔준다. 
+
+아래 `<Owner>` 컬렉션을 선언하는 코드에서도 `this.owners.findByLastName()`을 `this.owners.findByFirstName()`으로 바꿔주어야 한다. 단, 이 때 `findByFirstName()`은 OwnerRepository에 추가되어 있어야 한다.
+
+**OwnerRepository**
+
+~~~java
+/**
+  * Retrieve {@link Owner}s from the data store by first name, returning all owners
+  * whose last name <i>starts</i> with the given name.
+  * @param firstName Value to search for
+  * @return a Collection of matching {@link Owner}s (or an empty Collection if none
+  * found)
+*/
+@Query("SELECT DISTINCT owner FROM Owner owner left join fetch owner.pets WHERE owner.firstName LIKE :firstName%")
+@Transactional(readOnly = true)
+Collection<Owner> findByFirstName(@Param("firstName") String firstName);
+~~~
+
+`findByLastName`을 그대로 복사해서 `findByFirstName`이라는 컬렉션으로 새로 선언해준다. 파라미터값도 `lastName`대신 `firstName`으로 바꿔준다. 
+
+이렇게 `findByLastName`을 생성했으면, 컨트롤러에서 사용할 수 있게 된다. 
+
+컨트롤러가 완성되면, `owner`객체의 `getFirstName()`을 통해 불러온 firstName을, ownerRepository에서 생성한 Owner 컬렉션타입의 `findByFirstName`객체에 담고, 최종적으로 Owner 컬렉션타입의 `result` 객체에 담아냄으로써 이를 findOwner.html에서 출력하는 것이다.
+
+<br>
+
+
+
