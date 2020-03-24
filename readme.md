@@ -1,143 +1,82 @@
-# Spring PetClinic Sample Application [![Build Status](https://travis-ci.org/spring-projects/spring-petclinic.png?branch=master)](https://travis-ci.org/spring-projects/spring-petclinic/)
-Deploy this sample application to Pivotal Web Services:
+백기선님의 [예제로 배우는 스프링 입문] 강의를 듣다가 다 듣지못한 적이 있는데, 이번에 다시 듣게되었다. 듣는김에 정리하면 좋을것 같아 정리하면서 작성해보는 글.
 
-<a href="https://push-to.cfapps.io?repo=https%3A%2F%2Fgithub.com%2Fspring-projects%2Fspring-petclinic.git">
-    <img src="https://push-to.cfapps.io/ui/assets/images/Push-to-Pivotal-Light-with-Shadow.svg" width="180" alt="Push" align="center">
-</a>
+[스프링 샘플 웹 애플리케이션](https://github.com/spring-projects/spring-petclinic)을 다뤄보면서 스프링의 IoC, AOP, PSA 등에 대해 예제코드를 통해 맛보는 과정이다.
 
-## Understanding the Spring Petclinic application with a few diagrams
-<a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
+본 과정은 아래의 조건에 대한 선수학습을 요구한다.
 
-## Running petclinic locally
-Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
+1. 자바 프로그래밍 기초
+2. IDE (Intelli J 또는 Eclipse)
+3. 빌드 툴 (Gradle 또는 메이븐)
+4. Git
 
 
-```
-git clone https://github.com/spring-projects/spring-petclinic.git
-cd spring-petclinic
+
+## ToC
+
+- 프로젝트 설정
+  - [Clone a sample project](#clone)
+  - [Build and run a project](#build-run)
+- 프로젝트 살펴보기
+- 프로젝트 과제
+
+<br>
+
+## <a name="clone">Clone a sample project</a>
+
+먼저 샘플 애플리케이션을 원격저장소에서 클론해서 가져와야 한다. 필자의 경우는 개인 원격저장소로 fork한 이후 clone했다.
+
+원격 저장소의 URI부터 가져오자.
+
+<img src="https://lh3.googleusercontent.com/ov5vKj6r3uJYRU1PAF_Xf_oauZKkRtx5mgWbbte382yTnANwL5mzn5EEBZjyRdITm2crxTtQICW5x4DNht4rC0OFvVvm62um6YhUkfaYsU9C6mI4BkQGUKdzxqWE7dhgEhjPJmFr0y_n76HvyFcr9IZN_UaJqtoJxGpVxCVrVkilWewvBebIw_6V3D3VWtGOKjIl70Upd5jM-GKjhQfcSoyVATyhLzXNTUvzkJd_SvRN4rfN-_s9nZ_8u_jQVk4bOXri33Q9iUrrlf5VrL_2Jh_MbC6cZn8qTIFnsOpRslP8B6aVXG3qjzDe4TgROfNEHz0hm8IMMgLRFMMfXjdpKfqM4Zp2GhGY5dO34ak6iNaEy30ubSGJ3Yrk57J1cBfriVRXiY8cLeplhQfVqiTbPbkcKYY5fnYJEJJPu_snsU4jxzLHx0nfLfyWiRJer4mRYK1ZwGlAfd8nhLK0Y19NhTlWHXbxAOvidYQSltCfL9Wv5DufCtWY4vk0t8p_LWfiFUYnhPFSKuXSJNWaghOU9fXJn46K0VhxYg_SOQqKbuubCKTpD4xaMp9POpvMfGd8cI2uqL8IfPYCZQnYhnSGTAaZOU01jxR0YA22lOFyEd3HDHs1Vh3Du1S6MzkoluGppeRFqusT_ljcXaDPZMCFi812oUoOq8znjjZ99CuebPMGH2j7RSfpZvGekqkOXMc=w987-h592-no" style="zoom:50%;" />
+
+
+
+이후에 Intelli J를 열어서 **[Get from Version Control]** 버튼을 클릭하여 아까 클립보드에 복사해둔 원격저장소 URI를 붙여넣어서 가져오자.
+
+![](https://lh3.googleusercontent.com/g40Xf_ZeVVaKzDqAIPPuaQXnGHSj8AsG61l4fiJrme7T1dlAUCJDxnENX1a5SWSpXS3MJgjo4SiYG3EYo6nkyTcJEu83aCwPrQgPBkCj6beFsOZDy5A86rYrXu5HKMKWQ5KM3piuZiLNyz-yWN5aCpe-wwu9kwDI-G59B8fNTaHePWP0v76J_vWaMi3mEvARpLSEZurf7ZK6fn_8Ovl_PGfW747kuzzXMgJ7Jhy4FTT_15MjKDZnyZGmPA2m2KFBJTqGWqLYsXGi_yc2KE2akAc_EYXn7meFvbBor4WMZvIFgNEEA2gNl0oZu05a6SJq7XhzFfe-c4EO6tRGESjoJQLyhqzNCBugGDDNgC1IF6QaRXWSP5GUzWDDw5RLfj71_8_p4xFMqMdqIWkM5_Z3ZBks2Ae2jfL0cXYss0JUpz5wutMtAcYvg0pMDEzMgPMmnTtJlAKVBOsSY8Z-GoWxJ8ZrokwidcFSbxPvd81SxqyRtXbveGH53HxM8c06JmjkuToxDow4_pAXN8GgNnMjcbFtF70ZsoNU5GWb0CMtmKSXTYfdpFlCh301rxhv22rOazKuIjxjBcyMMsAAUW2ROTV7enUlNuIbfBFnb7nVj_q11xWxPFtpftYN2Nunv8JbIv19egBS7WCFISh41cmuCP_9t36k3q6-9QQbGgCAgaeb5GzMc6-ZMeV4iJ8Dv2BbAl2cb-C_shgbvPhlSBRLFI5RUX15mtXpH0-c54mQx_xpWQQdw4QBryDz=w500-h305-no)
+
+<br>
+
+본 샘플 애플리케이션의 빌드 툴은 메이븐이 설정되어 있다. 메이븐의 설정파일 pom.xml을 확인해보면, 따로 `<packaging>`이 설정되어 있지 않은데, 이렇게 따로 `<packaging>`설정이 없으면 이 프로젝트는 jar 프로젝트라고 한다. jar은 Java Application Archive의 약자라고 한다. 타입으로는 war(Web Application Archive)가 있다.
+
+
+
+**jar와 war의 차이**
+
+jar는 하나의 java application 기능을 가능하도록 하는 압축파일이며, 자바 클래스 파일들이 주로 압축대상에 해당한다.
+
+war는 jar와 달리 웹 어플리케이션을 지원하기 위한 압축방식인데, jar보다 더 큰 범위의 압축파일이다. 웹 애플리케이션에 필요한 모든 자원(jsp, servlet, gif, html, jar)을 포함한다.
+
+<br>
+
+## <a name="build-run">Build and run a project</a>
+
+당연히 작동되겠지만, 해당 프로젝트가 잘 빌드되고, 작동되는지 알아보자.
+
+**메이븐 빌드하기**
+
+~~~
 ./mvnw package
-java -jar target/*.jar
-```
+~~~
 
-You can then access petclinic here: http://localhost:8080/
+[![asciicast](https://asciinema.org/a/rCuwrlPLzK7FbojYLvqfjGzC4.svg)](https://asciinema.org/a/rCuwrlPLzK7FbojYLvqfjGzC4)
 
-<img width="1042" alt="petclinic-screenshot" src="https://cloud.githubusercontent.com/assets/838318/19727082/2aee6d6c-9b8e-11e6-81fe-e889a5ddfded.png">
+위의 화면처럼 화면 마지막에 <span style="color: green;">**BUILD SUCCESS**</span>가 출력되었다면, 성공적으로 빌드가 된 것이다.
 
-Or you can run it from Maven directly using the Spring Boot Maven plugin. If you do this it will pick up changes that you make in the project immediately (changes to Java source files require a compile as well - most people use an IDE for this):
+이제 메이븐으로 빌드한 jar파일을 Tomcat(웹 서버)으로 실행해볼 것이다. 
 
-```
-./mvnw spring-boot:run
-```
+~~~
+java -jar target/*jar
+~~~
 
-## In case you find a bug/suggested improvement for Spring Petclinic
-Our issue tracker is available here: https://github.com/spring-projects/spring-petclinic/issues
+[![asciicast](https://asciinema.org/a/HNNbEegr9IRlpJlydEAfaImOj.svg)](https://asciinema.org/a/HNNbEegr9IRlpJlydEAfaImOj)
 
+<span style="color: green;">**Started PetClinincApplication**</span>이라는 메세지가 마지막에 출력되었다면 성공적으로 실행된 것이다.
 
-## Database configuration
+로컬호스트에서 정상적으로 프로젝트가 구동되는것을 확인할 수 있다.
 
-In its default configuration, Petclinic uses an in-memory database (H2) which
-gets populated at startup with data. The h2 console is automatically exposed at `http://localhost:8080/h2-console`
-and it is possibl to inspect the content of the database using the `jdbc:h2:mem:testdb` url.
- 
-A similar setup is provided for MySql in case a persistent database configuration is needed.
-Note that whenever the database type is changed, the app needs to be run with a different profile: `spring.profiles.active=mysql` for MySql.
+![](https://lh3.googleusercontent.com/pT4QlA65nQbcrhP8QvItBOWCRdvfNRXQEnbDy_AUpniXaBFE86V_eK34tJABlMqTCJBSguvolsFfSnvvi5c_GREjUPb2hxmrqLT68yXBFAFD22EZhXQHFZJhrNtdbQGHZVSvNZqDDRBWj2VTZ7f8iYgrSpHZOStNtXhcA3UZUvW7VtaoVV1XVq1KckyI5pFvYpc4F66C7IgISQcuLLOW2FZUSBrULPmyn_EtK3uPuyzkKtlGrgzD7PRp9o8_ipfXjtZkhUJW94Z2ElcJy8e2jnPzLFhhub4PGU111-wXqsAaEWwROtNEzHY7MynutF3VLbpik2HpnMDtniG4l051oJB5EchUSea0qqA5H1ZeQejTXXe2yqLLKhMyt8JG6GGODzCC3dVeikEjWZ4BIUukrQVtOoF5_KsicfL5uVNK1lWcClwja6SgW4MVCXwF4IsfEIEPLeRlYmnwQGxtUcSfeROPKeVwq2wBonT4ihB5bPliyruwt9EWU3b5PF5H2MdDJBwUDtdgWf1d2qYPEyPQaLZSJHZam5e8SAjp3fUwGVe3aRXH4sSiYkORp8Xw3nbQ9UHFx6rMP3Q_mcQ-wvr1puWtrZ_JKHSR3jb9yN0b5Na1PMx5RbrpQ89lh8kR_xnXbdRk4T_eCB-24rRnpubzDQwW4KsPqO00OrUEimPAGuscKREC6sr2n8kz4v1hkginOx85h67dklGvZZ46m49FJtIjOcB_qzQL_xGlz83MBBfB48apa3D5dSyA=w1440-h922-no)
 
-You could start MySql locally with whatever installer works for your OS, or with docker:
+<br>
 
-```
-docker run -e MYSQL_USER=petclinic -e MYSQL_PASSWORD=petclinic -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=petclinic -p 3306:3306 mysql:5.7.8
-```
-
-Further documentation is provided [here](https://github.com/spring-projects/spring-petclinic/blob/master/src/main/resources/db/mysql/petclinic_db_setup_mysql.txt).
-
-## Working with Petclinic in your IDE
-
-### Prerequisites
-The following items should be installed in your system:
-* Java 8 or newer.
-* git command line tool (https://help.github.com/articles/set-up-git)
-* Your preferred IDE 
-  * Eclipse with the m2e plugin. Note: when m2e is available, there is an m2 icon in `Help -> About` dialog. If m2e is
-  not there, just follow the install process here: https://www.eclipse.org/m2e/
-  * [Spring Tools Suite](https://spring.io/tools) (STS)
-  * IntelliJ IDEA
-  * [VS Code](https://code.visualstudio.com)
-
-### Steps:
-
-1) On the command line
-```
-git clone https://github.com/spring-projects/spring-petclinic.git
-```
-2) Inside Eclipse or STS
-```
-File -> Import -> Maven -> Existing Maven project
-```
-
-Then either build on the command line `./mvnw generate-resources` or using the Eclipse launcher (right click on project and `Run As -> Maven install`) to generate the css. Run the application main method by right clicking on it and choosing `Run As -> Java Application`.
-
-3) Inside IntelliJ IDEA
-
-In the main menu, choose `File -> Open` and select the Petclinic [pom.xml](pom.xml). Click on the `Open` button.
-
-CSS files are generated from the Maven build. You can either build them on the command line `./mvnw generate-resources`
-or right click on the `spring-petclinic` project then `Maven -> Generates sources and Update Folders`.
-
-A run configuration named `PetClinicApplication` should have been created for you if you're using a recent Ultimate
-version. Otherwise, run the application by right clicking on the `PetClinicApplication` main class and choosing
-`Run 'PetClinicApplication'`.
-
-4) Navigate to Petclinic
-
-Visit [http://localhost:8080](http://localhost:8080) in your browser.
-
-
-## Looking for something in particular?
-
-|Spring Boot Configuration | Class or Java property files  |
-|--------------------------|---|
-|The Main Class | [PetClinicApplication](https://github.com/spring-projects/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
-|Properties Files | [application.properties](https://github.com/spring-projects/spring-petclinic/blob/master/src/main/resources) |
-|Caching | [CacheConfiguration](https://github.com/spring-projects/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/system/CacheConfiguration.java) |
-
-## Interesting Spring Petclinic branches and forks
-
-The Spring Petclinic master branch in the main [spring-projects](https://github.com/spring-projects/spring-petclinic)
-GitHub org is the "canonical" implementation, currently based on Spring Boot and Thymeleaf. There are
-[quite a few forks](https://spring-petclinic.github.io/docs/forks.html) in a special GitHub org
-[spring-petclinic](https://github.com/spring-petclinic). If you have a special interest in a different technology stack
-that could be used to implement the Pet Clinic then please join the community there.
-
-
-## Interaction with other open source projects
-
-One of the best parts about working on the Spring Petclinic application is that we have the opportunity to work in direct contact with many Open Source projects. We found some bugs/suggested improvements on various topics such as Spring, Spring Data, Bean Validation and even Eclipse! In many cases, they've been fixed/implemented in just a few days.
-Here is a list of them:
-
-| Name | Issue |
-|------|-------|
-| Spring JDBC: simplify usage of NamedParameterJdbcTemplate | [SPR-10256](https://jira.springsource.org/browse/SPR-10256) and [SPR-10257](https://jira.springsource.org/browse/SPR-10257) |
-| Bean Validation / Hibernate Validator: simplify Maven dependencies and backward compatibility |[HV-790](https://hibernate.atlassian.net/browse/HV-790) and [HV-792](https://hibernate.atlassian.net/browse/HV-792) |
-| Spring Data: provide more flexibility when working with JPQL queries | [DATAJPA-292](https://jira.springsource.org/browse/DATAJPA-292) |
-
-
-# Contributing
-
-The [issue tracker](https://github.com/spring-projects/spring-petclinic/issues) is the preferred channel for bug reports, features requests and submitting pull requests.
-
-For pull requests, editor preferences are available in the [editor config](.editorconfig) for easy use in common text editors. Read more and download plugins at <https://editorconfig.org>. If you have not previously done so, please fill out and submit the [Contributor License Agreement](https://cla.pivotal.io/sign/spring).
-
-# License
-
-The Spring PetClinic sample application is released under version 2.0 of the [Apache License](https://www.apache.org/licenses/LICENSE-2.0).
-
-[spring-petclinic]: https://github.com/spring-projects/spring-petclinic
-[spring-framework-petclinic]: https://github.com/spring-petclinic/spring-framework-petclinic
-[spring-petclinic-angularjs]: https://github.com/spring-petclinic/spring-petclinic-angularjs 
-[javaconfig branch]: https://github.com/spring-petclinic/spring-framework-petclinic/tree/javaconfig
-[spring-petclinic-angular]: https://github.com/spring-petclinic/spring-petclinic-angular
-[spring-petclinic-microservices]: https://github.com/spring-petclinic/spring-petclinic-microservices
-[spring-petclinic-reactjs]: https://github.com/spring-petclinic/spring-petclinic-reactjs
-[spring-petclinic-graphql]: https://github.com/spring-petclinic/spring-petclinic-graphql
-[spring-petclinic-kotlin]: https://github.com/spring-petclinic/spring-petclinic-kotlin
-[spring-petclinic-rest]: https://github.com/spring-petclinic/spring-petclinic-rest
+## 
