@@ -17,6 +17,7 @@
   - [Clone a sample project](#clone)
   - [Build and run a project](#build-run)
 - 프로젝트 살펴보기
+  - [프로젝트 살펴보기](#explore)
 - 프로젝트 과제
 
 <br>
@@ -79,4 +80,32 @@ java -jar target/*jar
 
 <br>
 
-## 
+## <a name="explore">프로젝트 살펴보기</a>
+
+프로젝트가 어떻게 작동되는 건지 조금 더 자세히 살펴보기 위해 application.properties의 debug모드를 활성화시키겠다.
+
+~~~
+loggin.level.org.springframework.web=DEBUG
+~~~
+
+![](https://lh3.googleusercontent.com/Y08n5Camz7tShU4Nmp90MzIhC6TqFQzcwCBWmHI3hxkiTGR4XIfd6tqjnv1-ImB8eD0iSNSfFkOO3LPkzljrF1hTYXisF77rMJQk3R1IfZOcJ5jbRaS7f_VnHb3MBq_YqfrL4VGsyO3ScQw3PMCFNemMkbXTmdS7aIIoPiinEm4istEwHwI2iOgvWj8orZgKHvT0jYt54_TLEK20i_6_MqmtawMFoB9Q1UJEani-VjflmTIZBWyqT1EhtMKgnZAdRgo6MO7i-jfJbTtfgiXO4kvQC4Y_8VUxanT2V0Jm_dYKyRn3M46zQxdNyEFfSzpth4ph6c8-WTXdzCEBF4KCPOLlOpt8j3PTXr3mYx9YVosButw1ltSjcmUjJQeKmuPyC9bwkKZCB-ZRFIyJzAGoOTgRr4qE73wZ5w0g8ClhghTSJPGXP8mu6PzxSysHtDud9436IfXcAIdrC7CvvSNNCNTKhLoRMy3uWsXTuyyljwB39WdnT3pe8quFhUQLmf36L2t-Sm4gSQQtowhzHFVxmtrkKb_r0RMjz3FaOYWQLtV_ZGI2TMb4Kk_ASujaff1fm2b7EMCfUOjHr0dofYctXIaJOZXe4ncWYEnkyolTJS5czhMlvYfA0WW5bf0P1bG_YI6MyGsW7gNp5WORQSPEn9XuI7bwsVAcOuwxwCUMWhaaspkPrmS9OTSc19mRz3ikRTA38IFldHk6bAlYRpuPhyNfA0fRjLpQIxrfQLB-ZDrUzIPuM0iDjv_b=w1310-h798-no)
+
+주석처리되어있는 문장을 주석해제 처리하고 다시 빌드하고, 웹 서버를 구동해보자.
+
+
+
+웹서버를 구동시킨 이후, **FIND OWNERS**를 시도해보았다.
+
+![](https://lh3.googleusercontent.com/bCzHXxE4Ml2Cj0KD0-myn9If1YddnT3QftxEPPoQyH0r1EhVq3q66UMfqSWftUOy4WmaUqgN77uyqDT3FfRgle4yw1HvQ7x5ZxKPHRTBEdAO0QPI_YYo0qo5_3eKHstKuMWfmDd83lgHEBAiVna0EtD4yJYoZ07fQ1E05SnQkTu2TEOR5gn0083a8ERnNUMEirar5yb5ylXRCaVgvEigGAfa3wJerfEOY8yWzQSE90R8ZmQbv88z2V4ySLyi1RozYWxFZcrUE1YZqLpg6k0SOTlqTgkWGcAKsFkixV1t3mNEmKu0f3kQ6RPVRqZuwRPIDvxDDIOiMLAJDd5cln8kY0PPsqlNNZTJ7ijno2bxh3gjaubCpXPBgFl6e_uxxFJ-H8uhBFTvz1HT5BcxB_4LvHoszW6mNssDIU4zIFcrbQei9sBBTg1oH2KWDZjTM8auzHpYMrRnfaONryY0r651SXRhpbbrnLvarsccGbk_7pQzA9jlL5sbaw7tffFG7xeEB-go57DI6cfeO5SXgdmfOt2VDoAAfUwSMRaOGveLJXcoHH7ZLa_Z0d7OcFu8CeXW7twJJZsbo4iN6b_o-uXZF8YLFRsnxImFkNMU_QzqWSl49rU48ta9_8iAWb8BUDgMOTY6FWf9MK6KVlB4w_cjwMK1dPf0JzEQOMPnm5xvKj5DlwS0qrKqmZ7yO4alYZm_CDvjSwML5tHJqn-sovCLGROv7CP1nPAwPwkWOQNnAV-TIsmEmOcbr1X5=w2108-h728-no)
+
+이렇게 했을때 콘솔에서는 어떤 일이 벌어질까
+
+![](https://lh3.googleusercontent.com/vY55SrvtFWHWImz0U7NSoquoovUjo7r-1m6ZTTuFFTSkCXHcr9mUdaCTh7_pzuOdlOy0VVr3vdEAi8EROm0FpfXpSs18E5RTW1-X3rRZTwzyhV0QlsFL0ggSDUoEuL0yX8T7XZKTVkdhwwhE4tJZO_hruMyNNxV3tFr5ean8e-511xZq3Y__3RD1ZMfECfMfYwjyL8M6O9VD1TBbeqdgMoFjaw4HN1PBKyDvAsbHqDUslWn7tBtx300jW7pyOHlsB57CXUAP24pOB0yK1OO22ZhrCu1KnpIYMLcLt3_UpeBRTrXJoa0IL-olgGEcCAzqqntyORCMWTipPVM1q-Kzs1khS-E4UnJdxq1X-JJhGSC789drj1_vJQF9zq_ksi36VcS00tgDdmN_XTyMxUHdHgN3J05B1pkSI5qkhJfQHi6bw83HyZqT74fw7gf3modyIxSne-65qMhlYaqB2aNnR9PRMqYjDAm1eUMq7ef0Txp8hftxTqjZJMbGV1D0dJUmGZQPv8mhLW74Lgup-9eq6WMBTG5tihgKzNndF8wQ2UOAldE1CNEy4Yyg3DVIQn0vsQQuuORnWPi5E2MoMH6hBs_8yr8V4z5zSmtg_aoF11u_Bslte2V-PwNHQLz0-ya3a9visWP1S_OxXmJgXGMphL7NOkz0jYEupLGOH1ZEZe8dREeOkJCattGpWFgSE_EOWlTI85K0KVEbtiLANbPIagjZRQu3IUKovpCY-2esAGv_TMQMYezoQPiT=w2106-h746-no)
+
+`/owners/find` 라는 URI를 맵핑하는 GET 요청이 들어왔음을 알 수 있다.
+
+두번째 출력된 로그에서는 어떤 컨트롤러(`org.springframework.samples.petclinic.owner.OwnerController`)의 어떤 메서드(`initFindForm`)가 작동되었는지도 알 수 있다.
+
+마지막 출력된 문장에서는 200 OK가 출력되었는데, 리소스를 성공적으로 불러왔음을 나타내는 HTTP 상태코드인것 같다.
+
+<br>
