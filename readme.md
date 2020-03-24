@@ -114,15 +114,15 @@ loggin.level.org.springframework.web=DEBUG
 
 ## <a name="quiz">과제</a>
 
-- Find Owner에서 LastName 대신 FirstName으로 조회하기
-- 단어가 정확히 일치하지 않아도 일부 일치해도 결과 출력하기
-- Owner 객체에 age 추가하기
+- Find Owner에서 LastName 대신 FirstName으로 조회하기 -> [해결](#quiz1)
+- 단어가 정확히 일치하지 않아도 일부 일치해도 결과 출력하기 -> [해결](#quiz2)
+- Owner 객체에 age 추가하기 -> [해결](#quiz3)
 
 <br>
 
 ## <a name="solution">풀이</a>
 
-### **Find Owner에서 LastName대신 FirstName으로 조회하기**
+### **<a name="quiz1">Find Owner에서 LastName대신 FirstName으로 조회하기</a>**
 
 ![](https://lh3.googleusercontent.com/jRJd10fZSgBIyehquyjIEE9HGcGeNnJbOqCtdczJy3buXgAcSeUAY4xZ4AzO5D6f5p1ExUpieH63kuQQbwXEz9tyHUMfmEUBKoGd3OzWLk1BVwrPwV4lChxD9fHGqJTjaqhKkI3zbPee-EBJ65Zrrh9um1sQ1xVjJRf9ASXPmDXPbUnLkbqCZL7uM7nD82LnL5jNPqp-HujNSSI4R9yyvZsuOKh0UYheFj5Dbxj9PnjcPHWX2dgMpBwsE61mV1R8n-F1dpf7gfiy9B_KryFHqarHN1QaZHs6aSXjum9HEU0MefO2tNdEsAMJ76bcmDNzv7LBOwKwAQFH4M_G60Eq4--QKSYoiaXeYlIWAq4eQwlpLGL0DS5ZJ4uRmmfYTUcymyo6NoUPaRNRXxBLhvGiyo9cjLz7WHkf76mc8jM5ltHn_WBzU0odBHLktHVWthQaGg6NbSMcX5cKV9CJa7p4GSWmso4k2Xj6WX66n0vL-viC_-ZXvooUMgCOuU4NWhGUSwCAa_djIKfLM2V3cpyUboqjlOIieCXreywVmkgzrymT5F8DimyXhS3UpZ6PuLRnL_NHzE0SJUcMwmf1303bMoWsaGizq9NRm80duA8BtBapTkmOh73GAy5cpw2XclQNzIAu-dH77jXvgsxjkYBtw57E34YRJytSgYptMEuFiWLmFRghEL_xZUaGEqJ9v1t6nKLcfggka4k9ITialNWMNE8ITNRPWTkuIq1QU9I779r_N_QdU1VZebQ_=w640-h530-no)
 
@@ -214,5 +214,37 @@ Collection<Owner> findByFirstName(@Param("firstName") String firstName);
 
 <br>
 
+## <a name="quiz2">단어가 정확히 일치하지 않아도 일부 일치해도 결과 출력하기</a>
+
+![](https://lh3.googleusercontent.com/z3jitT3xpVJIU_kAAFJHH5RnyzkBHIuEYAI3cqqqNQa0rwpagNKFHCZOhpRbrtc40ymEbtE8aXG_ESmrzA1z0t3d2CBcI02yTra-KHykD6qZXYYS1MYW_6Z28TcIzn9Vk3CblY7Ok6qIWeiA9gNGhbmPVibKNhleBhDRAPyD_JUWI1GLP9_Z9RTyGiqX6SWgCYwmIsrbzFbO6CWae1yFb3NF-EHfdWWN2uwfeV5Y6NkqcszUHYU-Y-DvbbFzis5wM48qDuYhZBWccA0Xz31KfeOBG0a-zYpv_zRiTnaXnrhLGY_e-P9UsM2kXEPkyVKGG-vvpKPR4081nj-iBbsVKPG8nn-jRGWDW0EdZjdrVXFnofzijJNI1ckp_PGwQDlpwaw0G1fbesC3LP7UplHnNXxf8x52NlJpw-UngFZZvmTIc-VszhleAFWBEINHuP4XiNxo0zUeygV3gq4H44SwGz5W-dDJMRnX5GIyDKXXMKJdLJLWoJvB0890mqHsV4c-FYp2DmYkEHhmGsl-2uNLBkf3S8h8sR5rWw3St6IefbtyHAsbWUWZR3keQyjaOzOuPp8ACGjwdTGFugrAXtdGm3ydDcx8fs-bG4OHU4DnHA4d9IABg8WdEdp9CNE4ekwPGPbeXYYP_iLGVeqKCFd_k1ier5hmyQSoz1rGtaqAMOiLiGxsdgiSABlezsVGzik_r96FlVxcZdO-Z6sBEHnjM97xtUbFCzw2RK4MD6alIzngkatAnO3cWO7M=w540-h288-no)
+
+Owner 리스트를 보면, George Franklin이라는 사람이 있다. 그런데 검색할 때에는 George라는 완벽한 firstName으로 조회하지 않으면, Franklin을 검색할 수 없다.
+
+`findByFirstName`을 실행하는 쿼리구문은 OwnerRepository에 가면 볼 수 있다.
+
+**OwnerRepository.java**
+
+~~~java
+/**
+   * Retrieve {@link Owner}s from the data store by first name, returning all owners
+   * whose last name <i>starts</i> with the given name.
+   * @param firstName Value to search for
+   * @return a Collection of matching {@link Owner}s (or an empty Collection if none
+   * found)
+*/
+@Query("SELECT DISTINCT owner FROM Owner owner left join fetch owner.pets WHERE owner.firstName LIKE %:firstName%")
+@Transactional(readOnly = true)
+Collection<Owner> findByFirstName(@Param("firstName") String firstName);
+~~~
+
+여기서 (`@Query`)를 이렇게 수정해야 한다. sql 조회에 사용하는 LIKE 뒤를 수정하는데 이 때 주의해야할점은 `:firtName`이 세미콜론을 포함해서 통째로 키워드에 해당하기 때문에 `%`를 세미콜론 앞에 붙여줘야 한다.
+
+여기까지 하면, firstName이 완전하지 않아도 조회할 수 있다.
+
+![](https://lh3.googleusercontent.com/EEbnoOZbnBIOc2W8RA4uECLxEcLQii9RlHYkaAc-r18o-5VszxbaxALEbxR0N5OlC2KfqGIkBt3R-GhBDi3u0FPDArtCajPw2zXwQ6ETke1U5tkhbxw2t0ObF2NLMtZmdJTMcEgwEyFZqX7L9BBl17pwrBV2LgKhJ5oVw2INVpHitjv-gFJw8rzhtNbXyyQ9i0hfAZiwbEYm3MpOWM2DMaLZg4qqY8r9tcuFkliijNo1IKREvqTdxqAa8Sheh3SARVPjnZwlBa7RUwkbEejBnn6F7aZG4y0c1VGNX51N2EnBMiX56H136G1OZg3l7cGyGtBdMQCQaYnjlfycOyzk-VVliIkChZ-VJKVli5Cv5X2WwTNXjwK1JDbc5a4t8OvLlFmQwIjPw4pEoDHrGyMHqqa0jP_sYgDwzO1u6weNW8sAARh24vrEu9mYmPuh-6vXjO_HlDLl4ciO03yJMd-xs3mZxlIvVJ6pjdbdEsNY9o7Q91Z96VQe6tfhWcjRAUZ5Z6hxqgY3XzDZinHhvIyJkEJSXGLhlljx3_rhPoqzNc4bfVzJuntQ9XYa9wYbIPshWHeYwdaKnS3h-D2rUqv-acfAKWj-cKmBG-R88UdHWSKgxeskduRZeVYjSyfEiOObYL-CN6PjFOPy1mJIzCbvEhKL-ADJbeJgVAgIY-2-Y0f7c5zYfw-o6SY6zzZ2iZsjYwksi3ZBQTOUei9JDbrNCnoLb1MiRBhj083yECrtHkrOsoVfAemLWqLF=w540-h288-no)
+
+그런데 하나 아쉬운 점이 있다면, firstName의 첫글자가 대문자가 아니면 owner가 제대로 조회되지 않는 단점이 있다.  
 
 
+
+<br>
